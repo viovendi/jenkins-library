@@ -100,16 +100,16 @@ def sendSlackAlert(state) {
   )
 }
 
-def checkoutFromGithub(repoUrl, githubUrl, credentialsId) {
+def checkoutFromGithub(repoUrl, githubUrl, credentialsId, branchName) {
   assert repoUrl != null
   assert githubUrl != null
   assert credentialsId != null
-  assert params.INFRASTRUCTURE != null
+  assert branchName != null
 
   checkout([
     $class: 'GitSCM', 
     branches: [[
-      name: "*/${params.INFRASTRUCTURE}"
+      name: "*/${branchName}"
     ]], 
     browser: [
       $class: 'GithubWeb', 
