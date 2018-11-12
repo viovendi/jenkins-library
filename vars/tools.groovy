@@ -100,11 +100,10 @@ def sendSlackAlert(state) {
   )
 }
 
-def checkoutFromGithub(repoUrl, githubUrl, credentialsId, branchName) {
-  assert repoUrl != null
-  assert githubUrl != null
-  assert credentialsId != null
+def checkoutFromGithub(repoName, branchName, credentialsId) {
+  assert repoName != null
   assert branchName != null
+  assert credentialsId != null
 
   checkout([
     $class: 'GitSCM', 
@@ -113,14 +112,14 @@ def checkoutFromGithub(repoUrl, githubUrl, credentialsId, branchName) {
     ]], 
     browser: [
       $class: 'GithubWeb', 
-      repoUrl: repoUrl
+      repoUrl: "https://github.com/viovendi/${repoName}/"
     ], 
     doGenerateSubmoduleConfigurations: false, 
     extensions: [], 
     submoduleCfg: [], 
     userRemoteConfigs: [[
       credentialsId: credentialsId, 
-      url: githubUrl
+      url: "git@github.com:viovendi/${repoName}.git"
     ]]
   ])
 }
