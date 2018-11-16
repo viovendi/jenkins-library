@@ -35,6 +35,26 @@ def saveParameterToDynamoDb(jobName, infrastructure, parameterName, value) {
   )
 }
 
+def updateEnvironmentTable(infrastructure, project, version) {
+  build (
+    job: 'Tools/Update Environment Table',
+    parameters: [
+      string (
+        name: 'INFRASTRUCTURE',
+        value: infrastructure
+      ),
+      string (
+        name: 'PROJECT',
+        value: project
+      ),
+      string (
+        name: 'VERSION',
+        value: version
+      )
+    ]
+  )
+}
+
 // Requires AWS credentials
 def getParameterFromDynamoDb(jobName, infrastructure, parameterName) {
   assert jobName != null
