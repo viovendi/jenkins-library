@@ -77,7 +77,7 @@ def getProductionApproval() {
   message1Console = "\n\nProduction changes! Approval Required!\n" +
   "The build has been paused for approval.\n"
 
-  message2 = describeJobParameters() +
+  message2 = describeParameters(params) +
   "Proceed the build to approve production changes or abort it to cancel.\n" + 
   "If no action is made the build will be aborted in 3 hours automatically.\n"
 
@@ -97,6 +97,32 @@ def sendSlackAlert(state) {
   assert state != null
   //TODO add asserts
 
+  slackSend (
+    color: getColor(state), 
+    message: "${env.JOB_NAME} (<${env.BUILD_URL}|#${env.BUILD_NUMBER}>) ${state} after ${currentBuild.durationString}\n" + 
+    "\nParameters: \n" +
+    describeParameters(params)
+  )
+}
+
+def sendSlackAlertWithOutput(state, outputValues) {
+  assert state != null
+  assert outputValues != null
+  //TODO add asserts
+
+  slackSend (
+    color: getColor(state), 
+    message: "${env.JOB_NAME} (<${env.BUILD_URL}|#${env.BUILD_NUMBER}>) ${state} after ${currentBuild.durationString}\n" + 
+    "\nParameters: \n" +
+    describeParameters(params) +
+    "\nOutputs: \n" +
+    describeParameters(outputValues)
+  )
+}
+
+def getColor(state) {
+  assert state != null
+
   def color
 
   switch (state) {
@@ -113,11 +139,8 @@ def sendSlackAlert(state) {
       color = "#CCCCCC"
       break
   }
-  slackSend (
-    color: color, 
-    message: "${env.JOB_NAME} (<${env.BUILD_URL}|#${env.BUILD_NUMBER}>) ${state} after ${currentBuild.durationString}\n" + 
-    describeJobParameters()
-  )
+
+  return color
 }
 
 def checkoutFromGithub(repoName, branchName, credentialsId) {
@@ -158,15 +181,15 @@ def deleteCloudFormationStack(stackName) {
   }
 }
 
-def describeJobParameters() {
-  assert params != null
+def describeParameters(arr) {
+  assert arr != null
 
-  paramsStr = ""
-  params.each {
-    paramsStr = paramsStr + "- ${it}\n"
+  resultStr = ""
+  arr.each {
+    resultStr = resultStr + "- ${it}\n"
   }
-  paramsStr = paramsStr + "\n"
-  return paramsStr
+  resultStr = resultStr + "\n"
+  return resultStr
 }
 
 // Requires AWS credentials
