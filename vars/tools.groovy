@@ -236,14 +236,10 @@ def getValueFromCloudFormationStackExport(name) {
   return value
 }
 
-def waitForCommandResult(script, expectedValue, timeoutTime, timeoutUnit) {
+def waitForCommandResult(script, query, expectedValue, timeoutTime, timeoutUnit) {
   timeout(time: timeoutTime, unit: timeoutUnit) {
     waitUntil {
-      def value = sh(
-        script: script,
-        returnStdout: true
-      ).trim()
-      
+      def value = tools.getValueFromResponse(script, query)
       return (value == expectedValue)
     }
   }
