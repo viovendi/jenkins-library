@@ -236,7 +236,7 @@ def getValueFromCloudFormationStackExport(name) {
   return value
 }
 
-def waitForCommandResult(def script, def expectedValue, def timeoutTime = 10, def timeoutUnit = 'MINUTES' ) {
+def waitForCommandResult(script, expectedValue, timeoutTime, timeoutUnit) {
   timeout(time: timeoutTime, unit: timeoutUnit) {
     waitUntil {
       def value = sh(
