@@ -248,3 +248,12 @@ def waitForCommandResult(script, expectedValue, timeoutTime, timeoutUnit) {
     }
   }
 }
+
+def getValueFromResponse(script, query) {
+  def value = sh(
+        script: "${script} --query '${query}' --no-paginate --output text",
+        returnStdout: true
+      ).trim()
+
+  return value
+}
