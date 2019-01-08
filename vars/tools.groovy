@@ -16,6 +16,12 @@ def isCreateOrUpdateAction() {
   return params.ACTION == 'Create/Update'
 }
 
+def isCreateAction() {
+  assert params.ACTION != null
+
+  return params.ACTION == 'Create'
+}
+
 def isDeleteAction() {
   assert params.ACTION != null
 
