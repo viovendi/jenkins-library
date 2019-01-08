@@ -264,8 +264,7 @@ def sshCommand(credentialsName, user, ipAddress, commands) {
   sshagent(credentials: ["${credentialsName}"]) {
     sh (
       "ssh -o StrictHostKeyChecking=no -l ${user} ${ipAddress} " +
-      "${commands} " +
-      "-a"
+      "${commands}"
     )
   }
 }
