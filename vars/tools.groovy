@@ -259,3 +259,13 @@ def getValueFromResponse(script, query) {
 
   return value
 }
+
+def executeSshCommand(credentialsName, ipAddress, commands) {
+  sshagent(credentials: ["${credentialsName}"]) {
+    sh (
+      "ssh -o StrictHostKeyChecking=no -l bitnami ${ipAddress} " +
+      "${commands} " +
+      "-a"
+    )
+  }
+}
