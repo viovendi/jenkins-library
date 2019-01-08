@@ -260,12 +260,20 @@ def getValueFromResponse(script, query) {
   return value
 }
 
-def executeSshCommand(credentialsName, ipAddress, commands) {
+def sshCommand(credentialsName, user, ipAddress, commands) {
   sshagent(credentials: ["${credentialsName}"]) {
     sh (
-      "ssh -o StrictHostKeyChecking=no -l bitnami ${ipAddress} " +
+      "ssh -o StrictHostKeyChecking=no -l ${user} ${ipAddress} " +
       "${commands} " +
       "-a"
+    )
+  }
+}
+
+def scpFolder(credentialsName, user, ipAddress, from, to) {
+  sshagent(credentials: ["${credentialsName}"]) {
+    sh (
+      "scp -rp ${from} ${user}@${ipAddress}:${to}"
     )
   }
 }
