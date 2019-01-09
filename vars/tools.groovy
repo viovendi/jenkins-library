@@ -263,8 +263,7 @@ def getValueFromResponse(script, query) {
 def sshCommand(credentialsName, user, ipAddress, commands) {
   sshagent(credentials: ["${credentialsName}"]) {
     sh (
-      "ssh -o StrictHostKeyChecking=no -l ${user} ${ipAddress} " +
-      "${commands}"
+      "ssh -o StrictHostKeyChecking=no ${user}@${ipAddress} \"${commands}\""
     )
   }
 }
