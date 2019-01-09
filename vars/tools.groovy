@@ -276,3 +276,11 @@ def scpFolder(credentialsName, user, ipAddress, from, to) {
     )
   }
 }
+
+def scpFile(credentialsName, user, ipAddress, from, to) {
+  sshagent(credentials: ["${credentialsName}"]) {
+    sh (
+      "scp -p ${from} ${user}@${ipAddress}:${to}"
+    )
+  }
+}
