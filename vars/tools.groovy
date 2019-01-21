@@ -283,3 +283,15 @@ def scpFile(credentialsName, user, ipAddress, from, to) {
     )
   }
 }
+
+// Method use GitHub plugin to set status for particular commit
+def setGitHubCommitStatus(String repoName, String commitHash, String state, String message) {
+  step([
+      $class            : 'GitHubCommitStatusSetter',
+      reposSource       : [$class: 'ManuallyEnteredRepositorySource', url: "https://github.com/viovendi/$repoName"],
+      contextSource     : [$class: 'ManuallyEnteredCommitContextSource', context: 'Unit test'],
+      errorHandlers     : [[$class: 'ChangingBuildStatusErrorHandler', result: 'UNSTABLE']],
+      commitShaSource   : [$class: 'ManuallyEnteredShaSource', sha: commitHash],
+      statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'AnyBuildResult', message: message, state: state]]]
+  ])
+}
