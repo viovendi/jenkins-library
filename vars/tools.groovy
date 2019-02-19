@@ -295,3 +295,19 @@ def setGitHubCommitStatus(String repoName, String commitHash, String state, Stri
       statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'AnyBuildResult', message: message, state: state]]]
   ])
 }
+
+// Checkout with custom refspec settings for PRs
+def checkoutPR(String repoName, String pullId, String commitHash) {
+  String refsp = ''
+  if (pullId != 'empty') {
+    // change refspec and branch for PR
+    refsp = '+refs/pull/*:refs/remotes/origin/pr/*'
+    commitHash = "origin/pr/$pullId/merge"
+  }
+  checkout([$class           : 'GitSCM',
+            branches         : [[name: commitHash]],
+            browser          : [$class: 'GithubWeb', repoUrl: "https://github.com/viovendi/$repoName"],
+            extensions       : [], submoduleCfg: [], doGenerateSubmoduleConfigurations: false,
+            userRemoteConfigs: [[credentialsId: '6b330ba2-0ab8-42b6-a6cf-e8e0331dab65', refspec: refsp, url: "git@github.com:viovendi/$repoName"]]
+  ])
+}
