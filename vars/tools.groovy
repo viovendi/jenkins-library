@@ -309,3 +309,7 @@ def removeInboundRuleForSecurityGroup(String groupName, int port, String ip) {
   targetGroupId = getValueFromResponse("aws ec2 describe-security-groups --filters Name=group-name,Values=$groupName", 'SecurityGroups[*].GroupId')
   sh "aws ec2 revoke-security-group-ingress --group-id $targetGroupId --protocol tcp --port $port --cidr $ip/32"
 }
+
+def getAgentPublicIp() {
+  return sh(script: 'curl http://checkip.amazonaws.com', returnStdout: true).trim()
+}
