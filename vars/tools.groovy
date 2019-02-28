@@ -302,6 +302,7 @@ def addInboundRuleForSecurityGroup(String groupName, int port, String ip) {
 
   if (!openIps.contains(ip)) { // rule not found
     sh "aws ec2 authorize-security-group-ingress --group-id $targetGroupId --protocol tcp --port $port --cidr $ip/32"
+    sleep(10)
   }
 }
 
