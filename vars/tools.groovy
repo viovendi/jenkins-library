@@ -295,3 +295,17 @@ def setGitHubCommitStatus(String repoName, String commitHash, String state, Stri
       statusResultSource: [$class: 'ConditionalStatusResultSource', results: [[$class: 'AnyBuildResult', message: message, state: state]]]
   ])
 }
+
+def addInboundRuleForSecurityGroup(String groupName, int port, String ip) {
+  targetGroupId = getValueFromResponse("aws ec2 describe-security-groups --filters Name=group-name,Values=$groupName", 'SecurityGroups[*].GroupId')
+  openIps = getValueFromResponse("aws ec2 describe-security-groups --group-ids $targetGroupId", 'SecurityGroups[*].IpPermissions[*].IpRanges[*].CidrIp')
+
+  if (!openIps.contains(ip)) { // rule not found
+    sh "aws ec2 authorize-security-group-ingress --group-id $targetGroupId --protocol tcp --port $port --cidr $ip/32"
+  }
+}
+
+def removeInboundRuleForSecurityGroup(String groupName, int port, String ip) {
+  targetGroupId = getValueFromResponse("aws ec2 describe-security-groups --filters Name=group-name,Values=$groupName", 'SecurityGroups[*].GroupId')
+  sh "aws ec2 revoke-security-group-ingress --group-id $targetGroupId --protocol tcp --port $port --cidr $ip/32"
+}
