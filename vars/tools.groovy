@@ -313,3 +313,19 @@ def checkoutPR(String repoName, String pullId, String commitHash, String action,
             userRemoteConfigs: [[credentialsId: '6b330ba2-0ab8-42b6-a6cf-e8e0331dab65', refspec: refsp, url: "git@github.com:viovendi/$repoName"]]
   ])
 }
+
+// constants used to configure Generic Webhook Trigger plugin
+def getGenericWebhookTriggerInjectedVars(String repoName) {
+  return [
+      [key: 'COMMIT_HASH', value: '$.after', defaultValue: 'empty'],
+      [key: 'ghprbPullId', value: '$.number', defaultValue: 'empty'],
+      // should be injected here to be used in CompareCoverageAction
+      [key: 'GIT_URL', value: '$.p', defaultValue: "git@github.com:viovendi/$repoName"],
+      [key: 'TARGET_BRANCH', value: '$.pull_request.base.ref', defaultValue: 'empty'],
+      [key: 'ACTION', value: '$.action', defaultValue: 'empty'],
+      [key: 'AUTHOR', value: '$.sender.login', defaultValue: 'empty'],
+  ]
+}
+
+def getGenericWebhookTriggerRegexText = "$TARGET_BRANCH $ACTION $COMMIT_HASH"
+def getGenericWebhookTriggerRegexFilter = '^(master|staging|empty)\\s(opened|edited|reopened|empty)\\s((?!0000000000000000000000000000000000000000).)*$'
