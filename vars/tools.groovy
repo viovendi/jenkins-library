@@ -297,8 +297,10 @@ def setGitHubCommitStatus(String repoName, String commitHash, String state, Stri
 }
 
 // Checkout with custom refspec settings for PRs
-def checkoutPR(String repoName, String pullId, String commitHash) {
+def checkoutPR(String repoName, String pullId, String commitHash, String action, String author) {
   String refsp = ''
+  String cause = (pullId == 'empty' ? "push ($commitHash)" : "PR (#$pullId) ") + (action == 'empty' ? '' : action)
+  currentBuild.description = "Started by $cause by $author"
   if (pullId != 'empty') {
     // change refspec and branch for PR
     refsp = '+refs/pull/*:refs/remotes/origin/pr/*'
