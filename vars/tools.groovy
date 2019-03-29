@@ -283,3 +283,12 @@ def scpFile(credentialsName, user, ipAddress, from, to) {
     )
   }
 }
+
+def getLightsailInstanceIp(instanceName) {
+  def value = getValueFromResponse(
+      "aws lightsail get-instance --instance-name ${instanceName}",
+      'instance.publicIpAddress'
+    )
+
+  return value
+}
