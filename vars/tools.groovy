@@ -322,3 +322,21 @@ def removeInboundRuleForSecurityGroup(String groupName, int port, String ip) {
 def getAgentPublicIp() {
   return sh(script: 'curl http://checkip.amazonaws.com', returnStdout: true).trim()
 }
+
+// Checkout with custom refspec settings for PRs
+def checkoutPR(String repoName, String pullId, String commitHash, String action, String author) {
+  String refsp = ''
+  String cause = (pullId == 'empty' ? "push ($commitHash)" : "PR (#$pullId) ") + (action == 'empty' ? '' : action)
+  currentBuild.description = "Started by $cause by $author"
+  if (pullId != 'empty') {
+    // change refspec and branch for PR
+    refsp = '+refs/pull/*:refs/remotes/origin/pr/*'
+    commitHash = "origin/pr/$pullId/merge"
+  }
+  checkout([$class           : 'GitSCM',
+            branches         : [[name: commitHash]],
+            browser          : [$class: 'GithubWeb', repoUrl: "https://github.com/viovendi/$repoName"],
+            extensions       : [], submoduleCfg: [], doGenerateSubmoduleConfigurations: false,
+            userRemoteConfigs: [[credentialsId: '6b330ba2-0ab8-42b6-a6cf-e8e0331dab65', refspec: refsp, url: "git@github.com:viovendi/$repoName"]]
+  ])
+}
