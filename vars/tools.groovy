@@ -340,3 +340,8 @@ def checkoutPR(String repoName, String pullId, String commitHash, String action,
             userRemoteConfigs: [[credentialsId: 'doobot-github', refspec: refsp, url: "https://github.com/viovendi/$repoName"]]
   ])
 }
+
+def removeArtifacts(String pattern) {
+  assert pattern != null
+  sh "rm -rf $pattern"
+}
