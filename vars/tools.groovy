@@ -340,3 +340,7 @@ def checkoutPR(String repoName, String pullId, String commitHash, String action,
             userRemoteConfigs: [[credentialsId: 'doobot-github', refspec: refsp, url: "https://github.com/viovendi/$repoName"]]
   ])
 }
+
+def removeZipArtifacts() {
+  sh "rm -rf *.zip"
+}
