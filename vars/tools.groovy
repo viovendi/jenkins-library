@@ -168,7 +168,7 @@ def checkoutFromGithub(repoName, branchName, credentialsId) {
     submoduleCfg: [], 
     userRemoteConfigs: [[
       credentialsId: credentialsId, 
-      url: "git@github.com:viovendi/${repoName}.git"
+      url: "https://github.com/viovendi/${repoName}"
     ]]
   ])
 }
@@ -337,6 +337,6 @@ def checkoutPR(String repoName, String pullId, String commitHash, String action,
             branches         : [[name: commitHash]],
             browser          : [$class: 'GithubWeb', repoUrl: "https://github.com/viovendi/$repoName"],
             extensions       : [], submoduleCfg: [], doGenerateSubmoduleConfigurations: false,
-            userRemoteConfigs: [[credentialsId: '6b330ba2-0ab8-42b6-a6cf-e8e0331dab65', refspec: refsp, url: "git@github.com:viovendi/$repoName"]]
+            userRemoteConfigs: [[credentialsId: 'doobot-github', refspec: refsp, url: "https://github.com/viovendi/$repoName"]]
   ])
 }
