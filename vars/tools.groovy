@@ -341,7 +341,6 @@ def checkoutPR(String repoName, String pullId, String commitHash, String action,
   ])
 }
 
-def removeArtifacts(String pattern) {
-  assert pattern != null
-  sh "rm -rf $pattern"
+def removeZipArtifacts() {
+  sh "rm -rf *.zip"
 }
