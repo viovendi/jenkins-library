@@ -99,6 +99,17 @@ def getProductionApproval() {
   }
 }
 
+def sendSlackAlertForTests(state) {
+  assert state != null
+  //TODO add asserts
+
+  slackSend (
+    channel: "#notifications_tests",
+    color: getColor(state), 
+    message: "${env.JOB_NAME} (<${env.BUILD_URL}|#${env.BUILD_NUMBER}>) ${state} after ${currentBuild.durationString}\n"
+  )
+}
+
 def sendSlackAlert(state) {
   assert state != null
   //TODO add asserts
