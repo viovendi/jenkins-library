@@ -106,9 +106,7 @@ def sendSlackAlertForTests(state) {
   slackSend (
     channel: "#notifications_tests",
     color: getColor(state), 
-    message: "${env.JOB_NAME} (<${env.BUILD_URL}|#${env.BUILD_NUMBER}>) ${state} after ${currentBuild.durationString}\n" + 
-    "\nParameters: \n" +
-    describeParameters(params)
+    message: "${env.JOB_NAME} (<${env.BUILD_URL}|#${env.BUILD_NUMBER}>) ${state} after ${currentBuild.durationString}\n"
   )
 }
 
